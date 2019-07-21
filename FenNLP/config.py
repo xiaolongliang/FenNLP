@@ -6,7 +6,7 @@
 import tensorflow as tf
 import json
 import copy
-class Config(object):
+class BertConfig(object):
     "Configuration for BertModel."
     def __init__(self,
                  vocab_size,
@@ -34,7 +34,7 @@ class Config(object):
         self.initializer_range = initializer_range
     @classmethod
     def from_dict(cls,json_object):
-        config = Config(vocab_size=None)
+        config = BertConfig(vocab_size=None)
         for (key,value) in json_object.items():
             config.__dict__[key] = value
 
@@ -51,6 +51,49 @@ class Config(object):
     def to_json_string(self):
         return json.dumps(self.to_dict(),indent=2,sort_keys=True)+'\n'
 
+class ModelConfig(object):
+    def __init__(self,epoch = 1,
+                lr = 5e-5,
+                maxlen = 128,
+                batch_size = 200,
+                num_class = 2,
+                use_one_hot_embeddings = True,
+                init_checkpoint = "cased_L-12_H-768_A-12/bert_model.ckpt",
+                bert_config_file = "cased_L-12_H-768_A-12/bert_config.json",
+                do_lower_case = False,
+                is_training = True,
+                do_valid = True,
+                data_name = "imdb",
+                mode = "CLF"):
+        self.epoch = epoch
+        self.lr = lr
+        self.maxlen = maxlen
+        self.batch_size = batch_size
+        self.num_class = num_class
+        self.use_one_hot_embeddings = use_one_hot_embeddings
+        self.init_checkpoint = init_checkpoint
+        self.bert_config_file = bert_config_file
+        self.do_lower_case =do_lower_case
+        self.is_training =is_training
+        self.do_valid = do_valid
+        self.data_name = data_name
+        self.mode = mode
+
+    def to_dict(self):
+        output = copy.deepcopy(self.__dict__)
+        return output
+
+    def to_json_string(self):
+        return json.dumps(self.to_dict(), indent=2, sort_keys=True) + '\n'
+
+
+def main():
+    config = ModelConfig()
+    x = config.to_dict()
+    print(x)
+
+if __name__=="__main__":
+    main()
 
 
 
